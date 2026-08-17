@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://guptan0506.github.io/sitemap.xml
