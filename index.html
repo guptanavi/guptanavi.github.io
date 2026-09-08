@@ -1,32 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Under Construction</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #1f2937;
-    }
-    main {
-      text-align: center;
-      padding: 2rem;
-    }
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navya Gupta — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,600;0,900;1,500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F6F2;
+    --ink:#1C1B18;
+    --ink-soft:#5B584F;
+    --teal:#2E6B5E;
+    --gold:#C9932E;
+    --line:#DAD6CB;
+    --card:#FFFFFF;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(var(--line) 1px, transparent 1px);
+    background-size:22px 22px;
+    background-color:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:var(--teal);}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--teal); outline-offset:3px;}
+
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
+
+  header.hero{
+    padding:96px 0 64px;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr 148px;
+    gap:40px;
+    align-items:center;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:900;
+    font-size:clamp(2.6rem, 6vw, 4.1rem);
+    line-height:0.98;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  .hero .role{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:1.3rem;
+    color:var(--teal);
+    margin:0 0 20px;
+  }
+  .hero p.bio{
+    max-width:52ch;
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    margin:0 0 26px;
+  }
+  .contact-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    font-size:0.95rem;
+  }
+  .contact-row a{text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:1px;}
+  .contact-row a:hover{border-color:var(--teal);}
+
+  .avatar{
+    position:relative;
+    width:148px;
+    height:148px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .avatar .frame{
+    position:absolute;
+    inset:0;
+  }
+  .avatar .frame span{
+    position:absolute;
+    width:22px;
+    height:22px;
+    border:2px solid var(--teal);
+    opacity:0;
+    animation:brackIn 0.6s ease-out forwards;
+  }
+  .avatar .frame span:nth-child(1){top:0; left:0; border-right:none; border-bottom:none; animation-delay:0.05s;}
+  .avatar .frame span:nth-child(2){top:0; right:0; border-left:none; border-bottom:none; animation-delay:0.15s;}
+  .avatar .frame span:nth-child(3){bottom:0; left:0; border-right:none; border-top:none; animation-delay:0.25s;}
+  .avatar .frame span:nth-child(4){bottom:0; right:0; border-left:none; border-top:none; animation-delay:0.35s;}
+  @keyframes brackIn{from{opacity:0; transform:scale(0.6);} to{opacity:1; transform:scale(1);}}
+  .avatar .mono{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2.4rem;
+    color:var(--ink);
+    background:var(--card);
+    width:104px;
+    height:104px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--line);
+  }
+
+  section{padding:52px 0; border-top:1px solid var(--line);}
+  section h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.55rem;
+    margin:0 0 30px;
+  }
+
+  /* Timeline */
+  .timeline{position:relative; padding-left:26px;}
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left:5px; top:6px; bottom:6px;
+    width:1px;
+    background:var(--line);
+  }
+  .entry{position:relative; margin-bottom:34px;}
+  .entry:last-child{margin-bottom:0;}
+  .entry::before{
+    content:"";
+    position:absolute;
+    left:-26px; top:6px;
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--teal);
+  }
+  .entry .top-line{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px 16px;
+    margin-bottom:4px;
+  }
+  .entry h3{margin:0; font-size:1.06rem; font-weight:600;}
+  .entry .org{color:var(--ink-soft); font-size:0.95rem;}
+  .entry .dates{color:var(--ink-soft); font-size:0.88rem;}
+  .entry ul{margin:8px 0 0; padding-left:18px; color:var(--ink-soft); font-size:0.96rem;}
+  .entry li{margin-bottom:5px;}
+
+  /* Project */
+  .project-card{
+    border:1px dashed var(--line);
+    padding:26px;
+    position:relative;
+  }
+  .project-card .tag{
+    display:inline-block;
+    font-size:0.78rem;
+    color:var(--gold);
+    border:1px solid var(--gold);
+    padding:2px 9px;
+    margin-bottom:14px;
+  }
+  .project-card h3{
+    font-family:'Fraunces', serif;
+    font-size:1.35rem;
+    margin:0 0 10px;
+  }
+  .project-card p{color:var(--ink-soft); margin:0 0 16px; font-size:0.98rem;}
+  .stack{font-size:0.86rem; color:var(--ink-soft); margin-bottom:18px;}
+  .stack span{color:var(--ink); font-weight:500;}
+  .project-links{display:flex; gap:20px; font-size:0.92rem;}
+  .project-links a{text-decoration:none; border-bottom:1px solid var(--line);}
+
+  /* Skills */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:26px 40px;
+  }
+  .skill-group h4{
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:0 0 8px;
+  }
+  .skill-group p{margin:0; font-size:0.98rem;}
+
+  /* Education */
+  .edu h3{margin:0 0 4px; font-size:1.06rem; font-weight:600;}
+  .edu .org{color:var(--ink-soft); font-size:0.95rem; margin-bottom:10px;}
+  .edu p{margin:4px 0; font-size:0.96rem; color:var(--ink-soft);}
+  .edu strong{color:var(--ink);}
+
+  /* Activities */
+  .activities .entry ul{margin-top:6px;}
+
+  footer{
+    padding:60px 0 80px;
+    border-top:1px solid var(--line);
+  }
+  footer h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.8rem;
+    margin:0 0 14px;
+  }
+  footer p{color:var(--ink-soft); max-width:48ch; margin:0 0 22px;}
+  .footer-links{display:flex; flex-wrap:wrap; gap:22px;}
+  .footer-links a{text-decoration:none; font-size:0.98rem; border-bottom:1px solid var(--line); padding-bottom:1px;}
+  .footer-links a:hover{border-color:var(--teal);}
+
+  @media (max-width:600px){
+    .hero-grid{grid-template-columns:1fr; gap:28px;}
+    .avatar{order:-1; width:104px; height:104px;}
+    .avatar .mono{width:78px; height:78px; font-size:1.8rem;}
+    .skills-grid{grid-template-columns:1fr;}
+    header.hero{padding:64px 0 44px;}
+  }
+</style>
 </head>
 <body>
-  <main>
-    <h1>🚧 Construction in Progress 🚧</h1>
-    <p>This site is currently being updated. Please check back soon.</p>
-  </main>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-grid">
+      <div>
+        <h1>Navya Gupta</h1>
+        <p class="role">IT student, building at the intersection of design and code</p>
+        <div class="contact-row">
+          <a href="mailto:gupta2ny@mail.uc.edu">gupta2ny@mail.uc.edu</a>
+          <a href="https://github.com/guptan0506" target="_blank" rel="noopener">github.com/guptan0506</a>
+          <span style="color:var(--ink-soft)">Cincinnati, OH</span>
+        </div>
+      </div>
+      <div class="avatar">
+        <div class="frame"><span></span><span></span><span></span><span></span></div>
+        <div class="mono">NG</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="timeline">
+      <div class="entry">
+        <div class="top-line">
+          <div>
+            <h3>Teaching Assistant, ITLC</h3>
+            <div class="org">University of Cincinnati</div>
+          </div>
+          <div class="dates">Aug 2026 – Present</div>
+        </div>
+        <ul>
+          <li>Support four course sections — Data Technology Essentials (x2), Computer Networking, and Implications of IT — grading work and giving consistent feedback</li>
+          <li>Hold regular office hours to reinforce key concepts and provide one-on-one support</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="top-line">
+          <div>
+            <h3>UX/UI Designer Intern</h3>
+            <div class="org">Nourishubs · Remote</div>
+          </div>
+          <div class="dates">May 2026 – Aug 2026</div>
+        </div>
+        <ul>
+          <li>Created wireframes and interactive prototypes in Figma, and designed a reusable component system for visual and functional consistency across the platform</li>
+          <li>Partnered with developers through design-to-development handoff, presenting work and iterating with stakeholders to refine the experience</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="top-line">
+          <div>
+            <h3>IT Intern</h3>
+            <div class="org">Rossford Junior-Senior High School</div>
+          </div>
+          <div class="dates">Sep – Dec 2025, May – Aug 2026</div>
+        </div>
+        <ul>
+          <li>Maintained a large fleet of school-issued devices, handling setup, updates, and repairs to minimize classroom downtime</li>
+          <li>Resolved 20+ helpdesk tickets weekly and assisted with basic network and system administration</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="project-card">
+      <span class="tag">personal project</span>
+      <h3>FixMate</h3>
+      <p>A fully responsive home-services discovery platform that helps people browse, evaluate, and connect with trusted local providers for household needs. Built end to end and shipped as a live MVP.</p>
+      <div class="stack">Built with <span>React</span> · <span>Vite</span> · deployed on <span>Vercel</span></div>
+      <div class="project-links">
+        <a href="https://github.com/guptan0506" target="_blank" rel="noopener">View code</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <p>JavaScript, Python, Java, C#</p>
+      </div>
+      <div class="skill-group">
+        <h4>Frameworks &amp; tools</h4>
+        <p>React, Vite, Tailwind CSS, HTML/CSS, SCSS, Git, Figma, MongoDB, Power BI</p>
+      </div>
+      <div class="skill-group">
+        <h4>Design</h4>
+        <p>UI/UX design, wireframing, prototyping, design systems</p>
+      </div>
+      <div class="skill-group">
+        <h4>Concepts</h4>
+        <p>Data structures &amp; algorithms, databases, basic networking, hardware &amp; software troubleshooting</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <h2>Education</h2>
+    <div class="edu">
+      <h3>University of Cincinnati</h3>
+      <div class="org">Bachelor of Science in Information Technology</div>
+      <p><strong>GPA:</strong> 3.9 / 4.0 · Expected Spring 2029</p>
+      <p><strong>Focus:</strong> Software Application Development, with a secondary focus in Data Technologies</p>
+    </div>
+  </section>
+
+  <section id="activities" class="activities">
+    <h2>Activities &amp; Awards</h2>
+    <div class="timeline">
+      <div class="entry">
+        <div class="top-line">
+          <div><h3>UC Ronald McDonald House</h3></div>
+          <div class="dates">Spring 2026 – Present</div>
+        </div>
+        <div class="org">Member</div>
+        <ul><li>Volunteer to plan and organize events for children and families staying at the House during medical treatment</li></ul>
+      </div>
+      <div class="entry">
+        <div class="top-line">
+          <div><h3>Cincinnati Regional Science Olympiad Tournament</h3></div>
+          <div class="dates">March 2026</div>
+        </div>
+        <div class="org">Event-Day Volunteer, Xavier University</div>
+        <ul><li>Supported registration, event scoring, and logistics for a regional STEM competition</li></ul>
+      </div>
+      <div class="entry">
+        <div class="top-line">
+          <div><h3>Dean's List</h3></div>
+          <div class="dates">Fall 2024 – Present</div>
+        </div>
+        <div class="org">University of Cincinnati</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h2>Let's talk</h2>
+    <p>Open to internships and collaborations where design and development meet. Reach out any time.</p>
+    <div class="footer-links">
+      <a href="mailto:gupta2ny@mail.uc.edu">Email me</a>
+      <a href="https://github.com/guptan0506" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+</div>
+
 </body>
 </html>
