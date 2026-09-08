@@ -17,8 +17,25 @@
     --ink: #171717;
     --soft: #555555;
     --teal: #25685a;
-    --gold: #996815; /* Increased contrast for accessibility (WCAG AA compliant) */
+    --gold: #996815;
     --line: #dddddd;
+    --dot-color: #dddddd;
+    --nav-bg: rgba(247,246,242,.85);
+    --card-shadow: rgba(0,0,0,.08);
+}
+
+/* Explicit Dark Theme Class (Triggered by Toggle or OS preference) */
+html.dark-theme {
+    --bg:#121212;
+    --white:#1c1c1c;
+    --ink:#f5f5f5;
+    --soft:#a0a0a0;
+    --teal:#419d89;
+    --gold:#e2a83b;
+    --line:#2d2d2d;
+    --dot-color:#242424;
+    --nav-bg: rgba(18,18,18,.85);
+    --card-shadow: rgba(0,0,0,.4);
 }
 
 *{
@@ -34,10 +51,11 @@ html{
 body{
     font-family:'Inter',sans-serif;
     color:var(--ink);
-    background: radial-gradient(#ddd 1px,transparent 1px);
+    background: radial-gradient(var(--dot-color) 1px, transparent 1px);
     background-size:22px 22px;
     background-color:var(--bg);
     line-height:1.7;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a{
@@ -81,7 +99,7 @@ nav{
     position:sticky;
     top:0;
     backdrop-filter:blur(12px);
-    background:rgba(247,246,242,.85);
+    background: var(--nav-bg);
     border-bottom:1px solid var(--line);
     z-index:1000;
 }
@@ -98,6 +116,29 @@ nav{
 .nav-links{
     display:flex;
     gap:20px;
+    align-items: center;
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    background: var(--white);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    border-color: var(--teal);
+    transform: translateY(-1px);
 }
 
 .hero{
@@ -141,7 +182,7 @@ nav{
     border-radius:50%;
     border:2px solid var(--teal);
     overflow: hidden;
-    background: white;
+    background: var(--white);
 }
 
 .avatar img{
@@ -167,23 +208,23 @@ nav{
 
 .btn-primary{
     background:var(--teal);
-    color:white;
+    color: #ffffff;
 }
 
 .btn-primary:hover{
     text-decoration: none;
-    background: #1c5045;
+    opacity: 0.9;
 }
 
 .btn-secondary{
-    background:white;
+    background:var(--white);
     border:1px solid var(--line);
     color: var(--ink);
 }
 
 .btn-secondary:hover{
     text-decoration: none;
-    border-color: var(--ink);
+    border-color: var(--teal);
 }
 
 .btn:hover{
@@ -196,7 +237,7 @@ nav{
 
 .featured-project{
     overflow:hidden;
-    background:white;
+    background:var(--white);
     border-radius:24px;
     border:1px solid var(--line);
 }
@@ -244,7 +285,7 @@ nav{
 }
 
 .project-card{
-    background:white;
+    background:var(--white);
     overflow:hidden;
     border-radius:20px;
     border:1px solid var(--line);
@@ -253,7 +294,7 @@ nav{
 
 .project-card:hover{
     transform:translateY(-5px);
-    box-shadow:0 16px 40px rgba(0,0,0,.08);
+    box-shadow:0 16px 40px var(--card-shadow);
 }
 
 .project-card img{
@@ -273,7 +314,7 @@ nav{
 }
 
 .stat{
-    background:white;
+    background:var(--white);
     border-radius:18px;
     border:1px solid var(--line);
     padding:24px;
@@ -314,7 +355,7 @@ nav{
 }
 
 .skill-card{
-    background:white;
+    background:var(--white);
     border:1px solid var(--line);
     border-radius:18px;
     padding:20px;
@@ -349,27 +390,17 @@ footer p{
     }
     
     .nav-links {
-        gap: 12px;
-        font-size: 0.85rem;
+        gap: 10px;
+        font-size: 0.82rem;
+    }
+
+    .theme-toggle {
+        padding: 4px 8px;
+        font-size: 0.75rem;
     }
 
     .stats-grid{
         grid-template-columns:1fr;
-    }
-}
-
-@media (prefers-color-scheme: dark){
-    :root{
-        --bg:#121212;
-        --white:#1c1c1c;
-        --ink:#f5f5f5;
-        --soft:#bdbdbd;
-        --line:#353535;
-        --gold:#e2a83b; /* Dark mode optimized gold contrast */
-    }
-
-    nav{
-        background:rgba(18,18,18,.9);
     }
 }
 </style>
@@ -387,6 +418,9 @@ footer p{
 <a href="#experience">Experience</a>
 <a href="#skills">Skills</a>
 <a href="#contact">Contact</a>
+<button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light theme">
+    <span id="themeIcon">🌙</span>
+</button>
 </div>
 
 </div>
@@ -704,6 +738,39 @@ Open to software engineering, product, UX, and technology internship opportuniti
 </footer>
 
 </div>
+
+<script>
+  const toggleBtn = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const htmlEl = document.documentElement;
+
+  // Determine initial preference (Saved setting > OS system preference)
+  const savedTheme = localStorage.getItem('theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+    applyTheme('dark');
+  } else {
+    applyTheme('light');
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    const isDark = htmlEl.classList.contains('dark-theme');
+    applyTheme(isDark ? 'light' : 'dark');
+  });
+
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      htmlEl.classList.add('dark-theme');
+      themeIcon.textContent = '☀️';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      htmlEl.classList.remove('dark-theme');
+      themeIcon.textContent = '🌙';
+      localStorage.setItem('theme', 'light');
+    }
+  }
+</script>
 
 </body>
 </html>
